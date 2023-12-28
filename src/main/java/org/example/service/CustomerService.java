@@ -1,6 +1,7 @@
 package org.example.service;
 
 import org.example.model.Customer;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ public class CustomerService {
             new Customer(3, "Steve")
     ));
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public Customer customerById(Integer id) {
         return customers.stream()
                 .filter(c -> c.id() != null && c.id().equals(id))
@@ -22,6 +24,7 @@ public class CustomerService {
                 .orElse(null);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public Customer insert(String name) {
 
         int maxId = customers.stream()
